@@ -1,9 +1,12 @@
 package com.flight.config;
 
 import com.flight.service.CustomUserDetailsService;
-
 import com.flight.filter.JwtAuthenticationFilter;
 import com.flight.util.JwtTokenUtil;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import java.util.List;
+import org.springframework.http.HttpMethod;
 
 /**
  * Spring Security配置类
@@ -49,37 +52,28 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // 使用BCrypt强哈希算法加密密码
         return new BCryptPasswordEncoder();
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        // 配置全局认证管理器，使用自定义UserDetailsService和密码加密器
-        auth.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // 配置安全过滤器链
-        // 1. 禁用CSRF
-        // 2. 设置权限规则
-        // 3. 配置无状态会话
-        // 4. 添加JWT认证过滤器
         http.csrf(csrf -> csrf.disable())
+        .cors(cors -> cors.configurationSource(request -> {
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedOriginPatterns(List.of("*"));
+            config.setAllowedMethods(List.of("*"));
+            config.setAllowedHeaders(List.of("*"));
+            config.setAllowCredentials(true);
+            return config;
+        }))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated()
             )
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil, this.userDetailsService),
-            UsernamePasswordAuthenticationFilter.class);
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil, userDetailsService), 
+                UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

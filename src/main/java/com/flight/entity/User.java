@@ -22,14 +22,26 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    public Long getId() {
+        return id;
+    }
+
     @Override
     public String getUsername() {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
     
     @Override
