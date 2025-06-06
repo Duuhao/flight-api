@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FlightServiceImpl implements FlightService {
@@ -21,7 +22,15 @@ public class FlightServiceImpl implements FlightService {
     
     @Override
     public List<Flight> searchFlights(String departure, String arrival, LocalDate date) {
-        return flightRepository.searchFlights(departure, arrival, date);
+        List<Object[]> results = flightRepository.searchFlights(departure, arrival, date);
+        return results.stream()
+            .map(arr -> {
+                Flight flight = (Flight) arr[0];
+                flight.setDepartureCityName((String) arr[1]);
+                flight.setArrivalCityName((String) arr[2]);
+                return flight;
+            })
+            .collect(Collectors.toList());
     }
 
     @Override

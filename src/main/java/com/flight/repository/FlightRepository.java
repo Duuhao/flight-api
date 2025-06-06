@@ -8,11 +8,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface FlightRepository extends JpaRepository<Flight, Long> {
-    @Query("SELECT f FROM Flight f WHERE " +
-           "f.departureAirport = :departure AND " +
-           "f.arrivalAirport = :arrival AND " +
-           "CAST(f.departureTime AS date) = :date")
-    List<Flight> searchFlights(
+    @Query("SELECT f, dep.name as departureCityName, arr.name as arrivalCityName " +
+           "FROM Flight f " +
+           "LEFT JOIN City dep ON f.departureAirport = dep.code " +
+           "LEFT JOIN City arr ON f.arrivalAirport = arr.code " +
+           "WHERE f.departureAirport = :departure " +
+           "AND f.arrivalAirport = :arrival " +
+           "AND CAST(f.departureTime AS date) = :date")
+    List<Object[]> searchFlights(
             @Param("departure") String departure,
             @Param("arrival") String arrival,
             @Param("date") LocalDate date);

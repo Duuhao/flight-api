@@ -92,7 +92,8 @@ public class AuthController {
         User newUser = new User();
         newUser.setUsername(registerRequest.getUsername());
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        newUser.setMembership(1); // 默认设置为白银会员
+        newUser.setEmail(registerRequest.getEmail());
+        newUser.setMembership(1); // Default to Silver membership
         userRepository.save(newUser);
         
         return ResponseEntity.ok("User registered successfully");

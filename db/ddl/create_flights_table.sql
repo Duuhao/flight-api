@@ -15,9 +15,7 @@ CREATE TABLE IF NOT EXISTS flights (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     
     INDEX idx_departure_arrival (departure_airport, arrival_airport, departure_time),
-    INDEX idx_flight_number (flight_number),
-    CONSTRAINT fk_flights_departure FOREIGN KEY (departure_airport) REFERENCES cities(code),
-    CONSTRAINT fk_flights_arrival FOREIGN KEY (arrival_airport) REFERENCES cities(code)
+    INDEX idx_flight_number (flight_number)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='航班信息表';
 
 -- 初始化测试数据

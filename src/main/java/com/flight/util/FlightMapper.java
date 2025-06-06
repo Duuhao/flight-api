@@ -10,6 +10,10 @@ public class FlightMapper {
         dto.setAirline(flight.getAirline());
         dto.setDepartureAirport(flight.getDepartureAirport());
         dto.setArrivalAirport(flight.getArrivalAirport());
+        dto.setDepartureCity(flight.getDepartureCityName() != null ? 
+            flight.getDepartureCityName() : flight.getDepartureAirport());
+        dto.setArrivalCity(flight.getArrivalCityName() != null ? 
+            flight.getArrivalCityName() : flight.getArrivalAirport());
         dto.setDepartureTime(flight.getDepartureTime());
         dto.setArrivalTime(flight.getArrivalTime());
         dto.setEconomyPrice(flight.getEconomyPrice());

@@ -23,9 +23,7 @@
 - 普通索引: 
   * idx_departure_arrival (出发机场,到达机场,起飞时间)
   * idx_flight_number (航班号)
-- 外键:
-  * fk_flights_departure (关联cities表)
-  * fk_flights_arrival (关联cities表)
+- 外键: 无
 
 ## 基础数据
 表初始化时会自动插入10条测试航班数据，包含：

@@ -6,6 +6,7 @@ import lombok.Data;
 public class LoginRequest {
     private String username;
     private String password;
+    private String email;
 
     // Temporary manual getter until Lombok is properly configured
     public String getUsername() {
@@ -15,5 +16,9 @@ public class LoginRequest {
     // Temporary manual getter until Lombok is properly configured
     public String getPassword() {
         return password;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

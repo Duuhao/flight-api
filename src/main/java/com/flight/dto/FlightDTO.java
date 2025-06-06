@@ -9,6 +9,8 @@ public class FlightDTO {
     private String airline;
     private String departureAirport;
     private String arrivalAirport;
+    private String departureCity;
+    private String arrivalCity;
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
     private Double economyPrice;
