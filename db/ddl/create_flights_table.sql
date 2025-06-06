@@ -1,22 +1,24 @@
--- 航班表创建脚本
-CREATE TABLE flights (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    flight_number VARCHAR(20) NOT NULL,
-    airline VARCHAR(50) NOT NULL,
-    departure_airport VARCHAR(10) NOT NULL,
-    arrival_airport VARCHAR(10) NOT NULL,
-    departure_time DATETIME NOT NULL,
-    arrival_time DATETIME NOT NULL,
-    economy_price DECIMAL(10,2) NOT NULL,
-    business_price DECIMAL(10,2) NOT NULL,
-    available_economy_seats INT NOT NULL,
-    available_business_seats INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+-- 创建航班信息表
+CREATE TABLE IF NOT EXISTS flights (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '航班ID',
+    flight_number VARCHAR(20) NOT NULL COMMENT '航班号',
+    airline VARCHAR(50) NOT NULL COMMENT '航空公司',
+    departure_airport VARCHAR(10) NOT NULL COMMENT '出发机场三字码',
+    arrival_airport VARCHAR(10) NOT NULL COMMENT '到达机场三字码',
+    departure_time DATETIME NOT NULL COMMENT '计划起飞时间',
+    arrival_time DATETIME NOT NULL COMMENT '计划到达时间',
+    economy_price DECIMAL(10,2) NOT NULL COMMENT '经济舱价格',
+    business_price DECIMAL(10,2) NOT NULL COMMENT '商务舱价格',
+    available_economy_seats INT NOT NULL COMMENT '可用经济舱座位数',
+    available_business_seats INT NOT NULL COMMENT '可用商务舱座位数',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     
     INDEX idx_departure_arrival (departure_airport, arrival_airport, departure_time),
-    INDEX idx_flight_number (flight_number)
-);
+    INDEX idx_flight_number (flight_number),
+    CONSTRAINT fk_flights_departure FOREIGN KEY (departure_airport) REFERENCES cities(code),
+    CONSTRAINT fk_flights_arrival FOREIGN KEY (arrival_airport) REFERENCES cities(code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='航班信息表';
 
 -- 初始化测试数据
 INSERT INTO flights VALUES

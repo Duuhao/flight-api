@@ -18,10 +18,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.flight.dto.UserInfoResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 @RestController
@@ -51,14 +53,32 @@ public class AuthController {
             throw new BadCredentialsException("Invalid password");
         }
 
-        String token = jwtTokenUtil.generateToken(userDetails);
         User user = userRepository.findByUsername(userDetails.getUsername())
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            
+        String token = jwtTokenUtil.generateToken(userDetails);
             
         return ResponseEntity.ok(new LoginResponse(
             token,
             user.getId(),
-            user.getUsername()
+            user.getUsername(),
+            user.getEmail(),
+            user.getMembership()
+        ));
+    }
+
+    @GetMapping("/user-info")
+    public ResponseEntity<UserInfoResponse> getUserInfo(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        String username = jwtTokenUtil.extractUsername(token);
+        
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            
+        return ResponseEntity.ok(new UserInfoResponse(
+            user.getUsername(),
+            user.getEmail(),
+            user.getMembership()
         ));
     }
 
@@ -72,6 +92,7 @@ public class AuthController {
         User newUser = new User();
         newUser.setUsername(registerRequest.getUsername());
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        newUser.setMembership(1); // 默认设置为白银会员
         userRepository.save(newUser);
         
         return ResponseEntity.ok("User registered successfully");
