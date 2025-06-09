@@ -41,11 +41,6 @@ public class FlightController {
             @RequestParam String departure,
             @RequestParam String arrival,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        
-        List<Flight> flights = flightService.searchFlights(departure, arrival, date);
-        List<FlightDTO> dtos = flights.stream()
-                .map(FlightMapper::toDTO)
-                .toList();
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(flightService.searchFlights(departure, arrival, date));
     }
 }

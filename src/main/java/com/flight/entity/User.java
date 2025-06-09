@@ -22,54 +22,24 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false)  
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false)  
     private String password;
 
-    @Column
     private String email;
     
-    // 会员等级：1=白银, 2=黄金, 3=白金, 4=钻石
-    @Column(nullable = false)
+    // 会员等级：1=白银, 2=黄金, 3=白金, 4=钻石/默认白银
     private Integer membership = 1;
 
-    public String getEmail() {
-        return email;
-    }
+    private Boolean enabled = true;  
 
-    public Integer getMembership() {
-        return membership;
-    }
+    private Boolean accountNonExpired = true;  
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    private Boolean accountNonLocked = true;  
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setMembership(Integer membership) {
-        this.membership = membership;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    @Column(nullable = false)
-    private Boolean enabled = true;
-
-    @Column(nullable = false)
-    private Boolean accountNonExpired = true;
-
-    @Column(nullable = false)
-    private Boolean accountNonLocked = true;
-
-    @Column(nullable = false)
-    private Boolean credentialsNonExpired = true;
+    private Boolean credentialsNonExpired = true;  
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

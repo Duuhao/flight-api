@@ -1,25 +1,16 @@
 package com.flight.util;
 
 import com.flight.dto.FlightDTO;
+import com.flight.entity.City;
 import com.flight.entity.Flight;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-public class FlightMapper {
-    public static FlightDTO toDTO(Flight flight) {
-        FlightDTO dto = new FlightDTO();
-        dto.setFlightNumber(flight.getFlightNumber());
-        dto.setAirline(flight.getAirline());
-        dto.setDepartureAirport(flight.getDepartureAirport());
-        dto.setArrivalAirport(flight.getArrivalAirport());
-        dto.setDepartureCity(flight.getDepartureCityName() != null ? 
-            flight.getDepartureCityName() : flight.getDepartureAirport());
-        dto.setArrivalCity(flight.getArrivalCityName() != null ? 
-            flight.getArrivalCityName() : flight.getArrivalAirport());
-        dto.setDepartureTime(flight.getDepartureTime());
-        dto.setArrivalTime(flight.getArrivalTime());
-        dto.setEconomyPrice(flight.getEconomyPrice());
-        dto.setBusinessPrice(flight.getBusinessPrice());
-        dto.setAvailableEconomySeats(flight.getAvailableEconomySeats());
-        dto.setAvailableBusinessSeats(flight.getAvailableBusinessSeats());
-        return dto;
-    }
+@Mapper
+public interface FlightMapper {
+    FlightMapper INSTANCE = Mappers.getMapper(FlightMapper.class);
+    @Mapping(target = "departureCity", source = "departureCityName")
+    @Mapping(target = "arrivalCity", source = "arrivalCityName")
+    FlightDTO toDTO(Flight flight);
 }

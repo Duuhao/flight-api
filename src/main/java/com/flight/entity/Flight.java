@@ -29,22 +29,6 @@ public class Flight {
     @Transient
     private String arrivalCityName;
     
-    public String getDepartureCityName() {
-        return departureCityName;
-    }
-    
-    public void setDepartureCityName(String departureCityName) {
-        this.departureCityName = departureCityName;
-    }
-    
-    public String getArrivalCityName() {
-        return arrivalCityName;
-    }
-    
-    public void setArrivalCityName(String arrivalCityName) {
-        this.arrivalCityName = arrivalCityName;
-    }
-    
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
     private Double economyPrice;
