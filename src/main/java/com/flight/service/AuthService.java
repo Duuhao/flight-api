@@ -4,7 +4,9 @@ import com.flight.dto.LoginRequest;
 import com.flight.dto.LoginResponse;
 import com.flight.dto.UserInfoResponse;
 import com.flight.entity.User;
+import com.flight.entity.Membership;
 import com.flight.repository.UserRepository;
+import com.flight.repository.MembershipRepository;
 import com.flight.util.JwtTokenUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,15 +20,18 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomUserDetailsService customUserDetailsService;
+    private final MembershipRepository membershipRepository;
 
     public AuthService(JwtTokenUtil jwtTokenUtil,
                      UserRepository userRepository,
                      PasswordEncoder passwordEncoder,
-                     CustomUserDetailsService customUserDetailsService) {
+                     CustomUserDetailsService customUserDetailsService,
+                     MembershipRepository membershipRepository) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.customUserDetailsService = customUserDetailsService;
+        this.membershipRepository = membershipRepository;
     }
 
     public LoginResponse authenticate(LoginRequest loginRequest) {
@@ -52,10 +57,14 @@ public class AuthService {
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             
+        Membership membership = membershipRepository.findById(user.getMembership())
+            .orElseThrow(() -> new RuntimeException("Membership not found"));
+            
         return new UserInfoResponse(
             user.getUsername(),
             user.getEmail(),
-            user.getMembership()
+            membership.getId(),
+            membership.getName()
         );
     }
 

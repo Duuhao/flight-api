@@ -11,7 +11,7 @@
 | username | VARCHAR(50) | 是 | - | 用户名，必须唯一 |
 | password | VARCHAR(100) | 是 | - | BCrypt加密后的密码，长度建议60-80字符 |
 | email | VARCHAR(100) | 否 | NULL | 用户邮箱，用于通知和找回密码 |
-| membership | INT | 否 | 1 | 会员等级(1-4对应Silver/Gold/Platinum/Diamond) |
+| membership | INT | 是 | 1 | 会员等级(1-4对应Silver/Gold/Platinum/Diamond) |
 | enabled | BOOLEAN | 否 | TRUE | 账户是否启用，false表示禁用 |
 | account_non_expired | BOOLEAN | 否 | TRUE | 账户是否过期，false将无法登录 |
 | account_non_locked | BOOLEAN | 否 | TRUE | 账户是否锁定，false将无法登录 |

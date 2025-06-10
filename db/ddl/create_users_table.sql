@@ -8,7 +8,8 @@ CREATE TABLE users (
   account_non_expired BOOLEAN DEFAULT TRUE,
   account_non_locked BOOLEAN DEFAULT TRUE,
   credentials_non_expired BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  membership INT NOT NULL DEFAULT 1
 );
 
 -- 测试用户(密码:test123)

@@ -1,6 +1,7 @@
 package com.flight.controller;
 
 import com.flight.dto.FlightDTO;
+import com.flight.dto.FlightSearchRequest;
 import com.flight.entity.Flight;
 import com.flight.service.FlightService;
 import com.flight.util.FlightMapper;
@@ -41,6 +42,10 @@ public class FlightController {
             @RequestParam String departure,
             @RequestParam String arrival,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return ResponseEntity.ok(flightService.searchFlights(departure, arrival, date));
+        FlightSearchRequest request = new FlightSearchRequest();
+        request.setDeparture(departure);
+        request.setArrival(arrival);
+        request.setDate(date);
+        return ResponseEntity.ok(flightService.searchFlights(request));
     }
 }

@@ -1,9 +1,11 @@
 package com.flight.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
 public class FlightDTO {
     private String flightNumber;
     private String airline;

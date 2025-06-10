@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import com.flight.dto.UpdatePasswordRequest;
 import com.flight.entity.User;
+import com.flight.entity.Membership;
+import com.flight.repository.MembershipRepository;
 import com.flight.service.CustomUserDetailsService;
 import com.flight.util.JwtTokenUtil;
 import org.springframework.http.ResponseEntity;
@@ -34,15 +36,18 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomUserDetailsService customUserDetailsService;
+    private final MembershipRepository membershipRepository;
 
     public AuthController(JwtTokenUtil jwtTokenUtil,
                          UserRepository userRepository,
                          PasswordEncoder passwordEncoder,
-                         CustomUserDetailsService customUserDetailsService) {
+                         CustomUserDetailsService customUserDetailsService,
+                         MembershipRepository membershipRepository) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.customUserDetailsService = customUserDetailsService;
+        this.membershipRepository = membershipRepository;
     }
 
     @PostMapping("/login")
@@ -75,10 +80,14 @@ public class AuthController {
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             
+        Membership membership = membershipRepository.findById(user.getMembership())
+            .orElseThrow(() -> new RuntimeException("Membership not found"));
+            
         return ResponseEntity.ok(new UserInfoResponse(
             user.getUsername(),
             user.getEmail(),
-            user.getMembership()
+            membership.getId(),
+            membership.getName()
         ));
     }
 
